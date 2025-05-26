@@ -1,0 +1,48 @@
+plugins {
+    // Apply the application plugin to add support for building a CLI application in Java.
+    id 'application'
+}
+
+repositories {
+    // Usar el repositorio Maven Central para resolver dependencias.
+    mavenCentral()
+}
+
+dependencies {
+    // Utilizar JUnit Jupiter para realizar pruebas unitarias.
+    testImplementation libs.junit.jupiter
+
+    // Dependencia para ejecutar JUnit correctamente.
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    
+    // Agregar Selenium WebDriver para la automatización de pruebas en navegadores.
+    implementation 'org.seleniumhq.selenium:selenium-java:4.30.0'
+
+    // Agregar TestNG como framework para pruebas automatizadas.
+    testImplementation 'org.testng:testng:7.11.0'
+
+    // Agregar Cucumber para pruebas basadas en BDD (Behavior Driven Development).
+    implementation 'io.cucumber:cucumber-java:7.14.0'
+
+    // Agregar soporte para ejecutar pruebas de Cucumber con JUnit.
+    testImplementation 'io.cucumber:cucumber-junit:7.14.0'
+
+    // WebDriverManager facilita la gestión de los drivers de Selenium.
+    implementation 'io.github.bonigarcia:webdrivermanager:5.7.0'
+    testImplementation 'tech.grasshopper:extentreports-cucumber7-adapter:1.7.0' // versión compatible con Cucumber 7
+}
+
+// Definir una versión específica de Java para facilitar la ejecución en distintos entornos.
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+// Configurar la ejecución de pruebas.
+tasks.named('test') {
+    // Pasar opciones de configuración de Cucumber como propiedad del sistema.
+    systemProperty "cucumber.options", System.getProperty("cucumber.options")
+    // Propagar las propiedades del sistema al proceso de pruebas.
+    systemProperties System.getProperties();
+}
